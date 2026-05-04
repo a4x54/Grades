@@ -1,1 +1,1084 @@
 
+<!DOCTYPE html>
+
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تسلسل الطلبة النهائي | كلية التقنية الهندسية للحاسوب والذكاء الاصطناعي</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #D4A017;
+    --gold-light: #F5C842;
+    --gold-dark: #A07800;
+    --silver: #A8A9AD;
+    --bronze: #CD7F32;
+    --bg-deep: #070B14;
+    --bg-card: #0D1525;
+    --bg-card2: #111C30;
+    --bg-hover: #162038;
+    --accent: #1A6BFF;
+    --accent2: #00D4AA;
+    --text-primary: #E8EDF8;
+    --text-secondary: #8B9BB4;
+    --text-muted: #4A5A78;
+    --border: rgba(255,255,255,0.06);
+    --border-gold: rgba(212,160,23,0.3);
+    --glow-gold: 0 0 30px rgba(212,160,23,0.2);
+    --glow-blue: 0 0 30px rgba(26,107,255,0.2);
+    --rank1-bg: linear-gradient(135deg, #2A1F00, #1A1200);
+    --rank2-bg: linear-gradient(135deg, #1A1C20, #0E1015);
+    --rank3-bg: linear-gradient(135deg, #1C1208, #120C04);
+  }
+
+- { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+font-family: ‘Cairo’, ‘Tajawal’, sans-serif;
+background: var(–bg-deep);
+color: var(–text-primary);
+min-height: 100vh;
+overflow-x: hidden;
+position: relative;
+}
+
+body::before {
+content: ‘’;
+position: fixed;
+top: 0; left: 0; right: 0; bottom: 0;
+background:
+radial-gradient(ellipse 80% 50% at 20% 10%, rgba(26,107,255,0.07) 0%, transparent 60%),
+radial-gradient(ellipse 60% 40% at 80% 80%, rgba(212,160,23,0.06) 0%, transparent 60%),
+radial-gradient(ellipse 40% 30% at 50% 50%, rgba(0,212,170,0.03) 0%, transparent 70%);
+pointer-events: none;
+z-index: 0;
+}
+
+.noise {
+position: fixed;
+top: 0; left: 0; width: 100%; height: 100%;
+opacity: 0.02;
+background-image: url(“data:image/svg+xml,%3Csvg viewBox=‘0 0 256 256’ xmlns=‘http://www.w3.org/2000/svg’%3E%3Cfilter id=‘noise’%3E%3CfeTurbulence type=‘fractalNoise’ baseFrequency=‘0.9’ numOctaves=‘4’ stitchTiles=‘stitch’/%3E%3C/filter%3E%3Crect width=‘100%25’ height=‘100%25’ filter=‘url(%23noise)’/%3E%3C/svg%3E”);
+pointer-events: none;
+z-index: 1;
+}
+
+main { position: relative; z-index: 2; }
+
+/* ─── HERO ─────────────────────────────────── */
+.hero {
+padding: 60px 24px 0;
+text-align: center;
+position: relative;
+}
+
+.university-badge {
+display: inline-flex;
+align-items: center;
+gap: 10px;
+background: rgba(26,107,255,0.1);
+border: 1px solid rgba(26,107,255,0.2);
+border-radius: 100px;
+padding: 8px 20px;
+font-size: 12px;
+color: #6BA3FF;
+letter-spacing: 0.5px;
+margin-bottom: 28px;
+animation: fadeInDown 0.8s ease both;
+}
+
+.university-badge::before {
+content: ‘’;
+width: 6px; height: 6px;
+background: #1A6BFF;
+border-radius: 50%;
+box-shadow: 0 0 8px #1A6BFF;
+animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+0%, 100% { opacity: 1; transform: scale(1); }
+50% { opacity: 0.5; transform: scale(0.8); }
+}
+
+.hero-title {
+font-size: clamp(28px, 5vw, 52px);
+font-weight: 900;
+line-height: 1.2;
+margin-bottom: 12px;
+animation: fadeInDown 0.8s 0.1s ease both;
+}
+
+.hero-title .gold {
+background: linear-gradient(135deg, var(–gold-light), var(–gold), var(–gold-dark));
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-clip: text;
+}
+
+.hero-subtitle {
+color: var(–text-secondary);
+font-size: 15px;
+font-weight: 400;
+margin-bottom: 50px;
+animation: fadeInDown 0.8s 0.2s ease both;
+}
+
+/* ─── STATS CARDS ─────────────────────────── */
+.stats-grid {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+gap: 16px;
+max-width: 900px;
+margin: 0 auto 60px;
+padding: 0 24px;
+animation: fadeInUp 0.8s 0.3s ease both;
+}
+
+.stat-card {
+background: var(–bg-card);
+border: 1px solid var(–border);
+border-radius: 16px;
+padding: 20px 16px;
+text-align: center;
+transition: all 0.3s ease;
+position: relative;
+overflow: hidden;
+}
+
+.stat-card::before {
+content: ‘’;
+position: absolute;
+top: 0; left: 0; right: 0;
+height: 2px;
+background: var(–gradient);
+}
+
+.stat-card:hover {
+transform: translateY(-4px);
+border-color: rgba(212,160,23,0.3);
+box-shadow: var(–glow-gold);
+}
+
+.stat-card .icon {
+font-size: 24px;
+margin-bottom: 10px;
+display: block;
+}
+
+.stat-card .value {
+font-size: 28px;
+font-weight: 900;
+color: var(–text-primary);
+display: block;
+line-height: 1;
+margin-bottom: 4px;
+}
+
+.stat-card .label {
+font-size: 11px;
+color: var(–text-muted);
+letter-spacing: 0.5px;
+}
+
+/* ─── SECTION FILTER & SEARCH ─────────────── */
+.controls {
+max-width: 1200px;
+margin: 0 auto 24px;
+padding: 0 24px;
+display: flex;
+gap: 12px;
+flex-wrap: wrap;
+align-items: center;
+animation: fadeInUp 0.8s 0.4s ease both;
+}
+
+.search-wrap {
+flex: 1;
+min-width: 220px;
+position: relative;
+}
+
+.search-wrap svg {
+position: absolute;
+right: 14px;
+top: 50%;
+transform: translateY(-50%);
+color: var(–text-muted);
+}
+
+.search-input {
+width: 100%;
+background: var(–bg-card);
+border: 1px solid var(–border);
+border-radius: 12px;
+padding: 12px 44px 12px 16px;
+color: var(–text-primary);
+font-family: ‘Cairo’, sans-serif;
+font-size: 14px;
+outline: none;
+transition: all 0.3s;
+}
+
+.search-input::placeholder { color: var(–text-muted); }
+
+.search-input:focus {
+border-color: rgba(26,107,255,0.5);
+box-shadow: 0 0 0 3px rgba(26,107,255,0.1);
+background: var(–bg-card2);
+}
+
+.filter-tabs {
+display: flex;
+gap: 6px;
+background: var(–bg-card);
+border: 1px solid var(–border);
+border-radius: 12px;
+padding: 4px;
+}
+
+.filter-tab {
+padding: 8px 18px;
+border-radius: 9px;
+border: none;
+background: transparent;
+color: var(–text-muted);
+font-family: ‘Cairo’, sans-serif;
+font-size: 13px;
+font-weight: 600;
+cursor: pointer;
+transition: all 0.25s;
+white-space: nowrap;
+}
+
+.filter-tab.active {
+background: var(–accent);
+color: white;
+box-shadow: 0 4px 15px rgba(26,107,255,0.35);
+}
+
+.filter-tab:hover:not(.active) {
+color: var(–text-primary);
+background: var(–bg-hover);
+}
+
+.count-badge {
+display: inline-flex;
+align-items: center;
+gap: 8px;
+background: var(–bg-card);
+border: 1px solid var(–border);
+border-radius: 10px;
+padding: 8px 16px;
+font-size: 13px;
+color: var(–text-secondary);
+white-space: nowrap;
+}
+
+.count-badge span { color: var(–gold); font-weight: 700; }
+
+/* ─── TABLE WRAPPER ─────────────────────────── */
+.table-section {
+max-width: 1200px;
+margin: 0 auto 80px;
+padding: 0 24px;
+animation: fadeInUp 0.8s 0.5s ease both;
+}
+
+.table-card {
+background: var(–bg-card);
+border: 1px solid var(–border);
+border-radius: 20px;
+overflow: hidden;
+box-shadow: 0 24px 80px rgba(0,0,0,0.4);
+}
+
+.table-head-bar {
+padding: 20px 28px;
+border-bottom: 1px solid var(–border);
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 12px;
+flex-wrap: wrap;
+}
+
+.table-head-bar h3 {
+font-size: 16px;
+font-weight: 700;
+color: var(–text-primary);
+}
+
+.table-head-bar .sub {
+font-size: 12px;
+color: var(–text-muted);
+margin-top: 2px;
+}
+
+.dots { display: flex; gap: 6px; }
+.dot { width: 10px; height: 10px; border-radius: 50%; }
+.dot-r { background: #FF5F57; }
+.dot-y { background: #FEBC2E; }
+.dot-g { background: #28C840; }
+
+.table-scroll { overflow-x: auto; }
+
+table {
+width: 100%;
+border-collapse: collapse;
+min-width: 780px;
+}
+
+thead th {
+background: rgba(255,255,255,0.03);
+padding: 14px 16px;
+text-align: center;
+font-size: 11px;
+font-weight: 700;
+color: var(–text-muted);
+letter-spacing: 0.8px;
+text-transform: uppercase;
+border-bottom: 1px solid var(–border);
+white-space: nowrap;
+cursor: pointer;
+user-select: none;
+transition: color 0.2s;
+}
+
+thead th:hover { color: var(–text-secondary); }
+thead th.sort-asc::after { content: ’ ↑’; color: var(–gold); }
+thead th.sort-desc::after { content: ’ ↓’; color: var(–gold); }
+
+tbody tr {
+border-bottom: 1px solid rgba(255,255,255,0.03);
+transition: background 0.2s;
+cursor: default;
+}
+
+tbody tr:hover { background: var(–bg-hover); }
+tbody tr:last-child { border-bottom: none; }
+
+/* Top 3 special rows */
+tbody tr.rank-1 { background: linear-gradient(135deg, rgba(212,160,23,0.08), rgba(245,200,66,0.04)); }
+tbody tr.rank-1:hover { background: linear-gradient(135deg, rgba(212,160,23,0.14), rgba(245,200,66,0.08)); }
+tbody tr.rank-2 { background: linear-gradient(135deg, rgba(168,169,173,0.06), transparent); }
+tbody tr.rank-2:hover { background: linear-gradient(135deg, rgba(168,169,173,0.10), transparent); }
+tbody tr.rank-3 { background: linear-gradient(135deg, rgba(205,127,50,0.06), transparent); }
+tbody tr.rank-3:hover { background: linear-gradient(135deg, rgba(205,127,50,0.10), transparent); }
+tbody tr.highlight-me {
+background: linear-gradient(135deg, rgba(26,107,255,0.1), rgba(0,212,170,0.05));
+outline: 1px solid rgba(26,107,255,0.25);
+outline-offset: -1px;
+}
+tbody tr.highlight-me:hover {
+background: linear-gradient(135deg, rgba(26,107,255,0.15), rgba(0,212,170,0.08));
+}
+
+td {
+padding: 13px 16px;
+text-align: center;
+font-size: 13px;
+color: var(–text-primary);
+white-space: nowrap;
+}
+
+td.name-cell {
+text-align: right;
+font-weight: 600;
+font-size: 13.5px;
+min-width: 180px;
+white-space: normal;
+max-width: 220px;
+}
+
+/* Rank badge */
+.rank-badge {
+display: inline-flex;
+align-items: center;
+justify-content: center;
+width: 34px; height: 34px;
+border-radius: 50%;
+font-weight: 800;
+font-size: 14px;
+}
+
+.rank-badge.gold {
+background: linear-gradient(135deg, #F5C842, #D4A017);
+color: #2A1800;
+box-shadow: 0 4px 15px rgba(212,160,23,0.45);
+}
+
+.rank-badge.silver {
+background: linear-gradient(135deg, #D0D1D5, #9A9B9F);
+color: #1A1C20;
+box-shadow: 0 4px 15px rgba(168,169,173,0.3);
+}
+
+.rank-badge.bronze {
+background: linear-gradient(135deg, #E49B4A, #A05A18);
+color: #1C0E04;
+box-shadow: 0 4px 15px rgba(205,127,50,0.3);
+}
+
+.rank-badge.normal {
+background: rgba(255,255,255,0.05);
+color: var(–text-muted);
+font-size: 12px;
+}
+
+/* Section badge */
+.section-tag {
+display: inline-block;
+padding: 3px 12px;
+border-radius: 100px;
+font-size: 11px;
+font-weight: 700;
+letter-spacing: 0.5px;
+}
+
+.section-tag.ab {
+background: rgba(26,107,255,0.15);
+color: #6BA3FF;
+border: 1px solid rgba(26,107,255,0.2);
+}
+
+.section-tag.cd {
+background: rgba(0,212,170,0.1);
+color: #40D9BE;
+border: 1px solid rgba(0,212,170,0.2);
+}
+
+/* Score bar */
+.score-cell { min-width: 120px; }
+
+.score-bar-wrap {
+display: flex;
+align-items: center;
+gap: 8px;
+}
+
+.score-num {
+font-size: 13px;
+font-weight: 700;
+min-width: 30px;
+text-align: right;
+}
+
+.score-bar {
+flex: 1;
+height: 5px;
+background: rgba(255,255,255,0.06);
+border-radius: 10px;
+overflow: hidden;
+min-width: 60px;
+}
+
+.score-fill {
+height: 100%;
+border-radius: 10px;
+transition: width 1s cubic-bezier(0.4,0,0.2,1);
+}
+
+/* Percentage badge */
+.pct-badge {
+display: inline-block;
+padding: 3px 10px;
+border-radius: 100px;
+font-size: 12px;
+font-weight: 700;
+}
+
+.pct-excellent { background: rgba(0,212,170,0.12); color: #00D4AA; }
+.pct-verygood  { background: rgba(26,107,255,0.12); color: #6BA3FF; }
+.pct-good      { background: rgba(245,200,66,0.12); color: #F5C842; }
+.pct-pass      { background: rgba(255,100,100,0.10); color: #FF8A8A; }
+
+.total-score {
+font-size: 15px;
+font-weight: 800;
+}
+
+.total-score.top { color: var(–gold-light); }
+
+/* ─── TOP 3 SHOWCASE ─────────────────────── */
+.podium-section {
+max-width: 900px;
+margin: 0 auto 50px;
+padding: 0 24px;
+animation: fadeInUp 0.8s 0.35s ease both;
+}
+
+.section-label {
+text-align: center;
+font-size: 11px;
+font-weight: 700;
+color: var(–text-muted);
+letter-spacing: 2px;
+text-transform: uppercase;
+margin-bottom: 24px;
+display: flex;
+align-items: center;
+gap: 12px;
+}
+
+.section-label::before, .section-label::after {
+content: ‘’;
+flex: 1;
+height: 1px;
+background: var(–border);
+}
+
+.podium-cards {
+display: grid;
+grid-template-columns: 1fr 1.1fr 1fr;
+gap: 16px;
+align-items: end;
+}
+
+.podium-card {
+background: var(–bg-card);
+border: 1px solid var(–border);
+border-radius: 18px;
+padding: 24px 16px;
+text-align: center;
+transition: all 0.4s ease;
+position: relative;
+overflow: hidden;
+}
+
+.podium-card::before {
+content: ‘’;
+position: absolute;
+top: 0; left: 0; right: 0;
+height: 3px;
+}
+
+.podium-card.p1 {
+border-color: var(–border-gold);
+box-shadow: var(–glow-gold);
+padding-bottom: 32px;
+}
+
+.podium-card.p1::before { background: linear-gradient(90deg, var(–gold-dark), var(–gold-light), var(–gold-dark)); }
+.podium-card.p2::before { background: linear-gradient(90deg, #888, #D0D0D0, #888); }
+.podium-card.p3::before { background: linear-gradient(90deg, #7A4010, #E49B4A, #7A4010); }
+
+.podium-card:hover { transform: translateY(-6px); }
+
+.podium-medal {
+font-size: 36px;
+margin-bottom: 12px;
+display: block;
+}
+
+.podium-rank {
+font-size: 11px;
+font-weight: 700;
+letter-spacing: 1.5px;
+text-transform: uppercase;
+margin-bottom: 8px;
+}
+
+.p1 .podium-rank { color: var(–gold); }
+.p2 .podium-rank { color: var(–silver); }
+.p3 .podium-rank { color: var(–bronze); }
+
+.podium-name {
+font-size: 13.5px;
+font-weight: 700;
+color: var(–text-primary);
+margin-bottom: 6px;
+line-height: 1.4;
+}
+
+.podium-section-tag {
+font-size: 11px;
+color: var(–text-muted);
+margin-bottom: 14px;
+}
+
+.podium-score {
+font-size: 28px;
+font-weight: 900;
+margin-bottom: 2px;
+}
+
+.p1 .podium-score { color: var(–gold-light); }
+.p2 .podium-score { color: var(–silver); }
+.p3 .podium-score { color: var(–bronze); }
+
+.podium-pct {
+font-size: 12px;
+color: var(–text-muted);
+}
+
+/* ─── FOOTER ─────────────────────────────── */
+footer {
+text-align: center;
+padding: 40px 24px;
+border-top: 1px solid var(–border);
+color: var(–text-muted);
+font-size: 12px;
+position: relative;
+z-index: 2;
+}
+
+footer .footer-inner {
+max-width: 600px;
+margin: 0 auto;
+}
+
+footer .update-info {
+background: var(–bg-card);
+border: 1px solid var(–border);
+border-radius: 10px;
+padding: 10px 20px;
+display: inline-flex;
+gap: 20px;
+font-size: 12px;
+color: var(–text-secondary);
+margin-bottom: 16px;
+flex-wrap: wrap;
+justify-content: center;
+}
+
+footer .update-info span:first-child::before { content: ’📅 ’; }
+footer .update-info span:nth-child(2)::before { content: ’👥 ’; }
+footer .update-info span:nth-child(3)::before { content: ’📊 ’; }
+
+/* ─── NO RESULTS ─────────────────────────── */
+.no-results {
+text-align: center;
+padding: 60px 20px;
+display: none;
+}
+
+.no-results .icon { font-size: 48px; margin-bottom: 12px; display: block; opacity: 0.4; }
+.no-results p { color: var(–text-muted); font-size: 14px; }
+
+/* ─── ANIMATIONS ─────────────────────────── */
+@keyframes fadeInDown {
+from { opacity: 0; transform: translateY(-20px); }
+to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInUp {
+from { opacity: 0; transform: translateY(24px); }
+to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shimmer {
+0% { background-position: -200% center; }
+100% { background-position: 200% center; }
+}
+
+.shimmer-text {
+background: linear-gradient(90deg, var(–gold-dark), var(–gold-light), var(–gold-dark), var(–gold-light), var(–gold-dark));
+background-size: 200% auto;
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-clip: text;
+animation: shimmer 4s linear infinite;
+}
+
+/* ─── RESPONSIVE ─────────────────────────── */
+@media (max-width: 640px) {
+.hero { padding: 40px 16px 0; }
+.podium-cards { grid-template-columns: 1fr; }
+.podium-card { padding: 20px 14px !important; }
+.stats-grid { grid-template-columns: repeat(2, 1fr); }
+.controls { flex-direction: column; }
+.filter-tabs { width: 100%; justify-content: center; }
+}
+
+/* Scroll indicator */
+.scroll-hint {
+text-align: center;
+color: var(–text-muted);
+font-size: 11px;
+padding: 8px;
+display: none;
+}
+
+@media (max-width: 900px) { .scroll-hint { display: block; } }
+
+/* Row animation on filter */
+tbody tr { animation: rowFadeIn 0.3s ease both; }
+@keyframes rowFadeIn {
+from { opacity: 0; transform: translateX(-8px); }
+to { opacity: 1; transform: translateX(0); }
+}
+</style>
+
+</head>
+<body>
+<div class="noise"></div>
+<main>
+
+  <!-- ─── HERO ─── -->
+
+  <section class="hero">
+    <div class="university-badge">كلية التقنية الهندسية للحاسوب والذكاء الاصطناعي · جامعة التقنية الشمالية</div>
+    <h1 class="hero-title">
+      تسلسل الطلبة <span class="shimmer-text">النهائي</span>
+    </h1>
+    <p class="hero-subtitle">المرحلة الثالثة · قسم هندسة تقنيات الأمن السيبراني والحوسبة السحابية · السنة الدراسية 2025–2026</p>
+  </section>
+
+  <!-- ─── STATS ─── -->
+
+  <div class="stats-grid">
+    <div class="stat-card" style="--gradient: linear-gradient(90deg, #1A6BFF, #4D8DFF)">
+      <span class="icon">👨‍🎓</span>
+      <span class="value" id="total-count">59</span>
+      <span class="label">إجمالي الطلبة</span>
+    </div>
+    <div class="stat-card" style="--gradient: linear-gradient(90deg, #D4A017, #F5C842)">
+      <span class="icon">🏆</span>
+      <span class="value" id="top-score">186</span>
+      <span class="label">أعلى مجموع</span>
+    </div>
+    <div class="stat-card" style="--gradient: linear-gradient(90deg, #00D4AA, #40D9BE)">
+      <span class="icon">📈</span>
+      <span class="value" id="avg-score">154.6</span>
+      <span class="label">متوسط المجموع</span>
+    </div>
+    <div class="stat-card" style="--gradient: linear-gradient(90deg, #9B6BFF, #BE95FF)">
+      <span class="icon">📚</span>
+      <span class="value">190</span>
+      <span class="label">المجموع الكلي</span>
+    </div>
+    <div class="stat-card" style="--gradient: linear-gradient(90deg, #FF6B6B, #FF9B9B)">
+      <span class="icon">🎯</span>
+      <span class="value">97.9%</span>
+      <span class="label">أعلى نسبة</span>
+    </div>
+  </div>
+
+  <!-- ─── PODIUM ─── -->
+
+  <section class="podium-section">
+    <div class="section-label">المتصدرون الثلاثة</div>
+    <div class="podium-cards">
+      <!-- 2nd -->
+      <div class="podium-card p2">
+        <span class="podium-medal">🥈</span>
+        <div class="podium-rank">المرتبة الثانية</div>
+        <div class="podium-name">ريان غسان هشام طاهر</div>
+        <div class="podium-section-tag">شعبة AB</div>
+        <div class="podium-score">179</div>
+        <div class="podium-pct">94.2%</div>
+      </div>
+      <!-- 1st -->
+      <div class="podium-card p1">
+        <span class="podium-medal">🥇</span>
+        <div class="podium-rank">المرتبة الأولى</div>
+        <div class="podium-name">مصطفى عبد العزيز حمزة حسن</div>
+        <div class="podium-section-tag">شعبة AB</div>
+        <div class="podium-score">186</div>
+        <div class="podium-pct">97.9%</div>
+      </div>
+      <!-- 3rd -->
+      <div class="podium-card p3">
+        <span class="podium-medal">🥉</span>
+        <div class="podium-rank">المرتبة الثالثة</div>
+        <div class="podium-name">عبد الرحمن صفوان نذير بشير</div>
+        <div class="podium-section-tag">شعبة CD</div>
+        <div class="podium-score">178</div>
+        <div class="podium-pct">93.7%</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── CONTROLS ─── -->
+
+  <div class="controls">
+    <div class="search-wrap">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+      </svg>
+      <input class="search-input" type="text" id="search" placeholder="ابحث عن اسم الطالب..." oninput="filterTable()">
+    </div>
+    <div class="filter-tabs">
+      <button class="filter-tab active" onclick="setFilter('all', this)">الكل</button>
+      <button class="filter-tab" onclick="setFilter('AB', this)">شعبة AB</button>
+      <button class="filter-tab" onclick="setFilter('CD', this)">شعبة CD</button>
+    </div>
+    <div class="count-badge">الظاهر: <span id="visible-count">59</span> طالب</div>
+  </div>
+
+  <!-- ─── TABLE ─── -->
+
+  <section class="table-section">
+    <p class="scroll-hint">← مرر للمشاهدة →</p>
+    <div class="table-card">
+      <div class="table-head-bar">
+        <div>
+          <h3>سجل الدرجات الكامل</h3>
+          <div class="sub">مرتب تنازلياً حسب المجموع الكلي من 190 درجة</div>
+        </div>
+        <div class="dots">
+          <div class="dot dot-r"></div>
+          <div class="dot dot-y"></div>
+          <div class="dot dot-g"></div>
+        </div>
+      </div>
+      <div class="table-scroll">
+        <table id="main-table">
+          <thead>
+            <tr>
+              <th onclick="sortTable(0)">التسلسل</th>
+              <th onclick="sortTable(1)">الرتبة</th>
+              <th style="text-align:right; padding-right:20px">اسم الطالب</th>
+              <th onclick="sortTable(3)">الشعبة</th>
+              <th onclick="sortTable(4)">منهج البحث / 40</th>
+              <th onclick="sortTable(5)">AB-CD / 50</th>
+              <th onclick="sortTable(6)">أمن المدمجة / 50</th>
+              <th onclick="sortTable(7)">Cyber Defense / 50</th>
+              <th onclick="sortTable(8)">المجموع / 190</th>
+              <th onclick="sortTable(9)">النسبة</th>
+            </tr>
+          </thead>
+          <tbody id="table-body"></tbody>
+        </table>
+        <div class="no-results" id="no-results">
+          <span class="icon">🔍</span>
+          <p>لا توجد نتائج مطابقة للبحث</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ─── FOOTER ─── -->
+
+<footer>
+  <div class="footer-inner">
+    <div class="update-info">
+      <span>آخر تحديث: 2 مايو 2026</span>
+      <span>59 طالباً مُدرجاً</span>
+      <span>المجموع الكلي 190 درجة</span>
+    </div>
+    <p>كلية التقنية الهندسية للحاسوب والذكاء الاصطناعي · جامعة التقنية الشمالية</p>
+  </div>
+</footer>
+
+<script>
+const RAW_DATA = [
+  [1,1,"مصطفى عبد العزيز حمزة حسن","AB",38,48,50,50,186,0.978947],
+  [2,2,"ريان غسان هشام طاهر","AB",40,41,48,50,179,0.942105],
+  [3,3,"عبد الرحمن صفوان نذير بشير","CD",39,39,50,50,178,0.936842],
+  [4,3,"مصطفى محمد مجدي عبد المجيد","CD",38,45,45,50,178,0.936842],
+  [5,5,"انس خالد احمد محمد","AB",39,41,46,50,176,0.926316],
+  [6,6,"سارة محمد يوسف محمد","AB",40,39,46,50,175,0.921053],
+  [7,6,"محمد هيثم حازم عبد","AB",38,40,47,50,175,0.921053],
+  [8,8,"عبد الرحيم نائل سامي نوري","AB",38,35,50,50,173,0.910526],
+  [9,9,"احمد هاشم احمد محمد","CD",39,37,50,46,172,0.905263],
+  [10,10,"احمد علي نوزت محمد كامل","AB",38,35,48,50,171,0.900000],
+  [11,11,"براء عبد الرحمن مطلك صالح","CD",38,38,43,50,169,0.889474],
+  [12,12,"بشار بسام الياس حنا","AB",38,33,47,50,168,0.884211],
+  [13,12,"سيف نعمت نائف محمود","CD",40,35,43,50,168,0.884211],
+  [14,14,"رهف اوس عبد الوهاب رمضان","CD",32,41,43,50,166,0.873684],
+  [15,14,"علي محمد يحيى سليمان","CD",39,37,40,50,166,0.873684],
+  [16,16,"ريما رغيد علي خليل","CD",38,39,37,50,164,0.863158],
+  [17,16,"عبيدة مثنى عبدالهادي يحيى","AB",34,39,41,50,164,0.863158],
+  [18,16,"يثرب مؤيد محمود احمد","AB",38,31,45,50,164,0.863158],
+  [19,19,"برير حمزه حسين علي","AB",39,37,43,44,163,0.857895],
+  [20,19,"مازن ابراهيم كلو طلك","CD",38,36,39,50,163,0.857895],
+  [21,21,"عيسى خضر محمود حمد","CD",39,32,41,50,162,0.852632],
+  [22,22,"اياد اسالم صادق محمود","AB",37,42,36,46,161,0.847368],
+  [23,23,"طه محمد زكي حمدي","AB",40,31,39,48,158,0.831579],
+  [24,23,"عبدهللا محمد عطية عودة","CD",37,34,37,50,158,0.831579],
+  [25,23,"قاسم زكريا قاسم محمد علي","AB",35,35,38,50,158,0.831579],
+  [26,23,"محمد رعد احمد محمد","CD",38,36,36,48,158,0.831579],
+  [27,27,"ريم سعد غانم محمد علي","AB",37,31,43,46,157,0.826316],
+  [28,27,"محمد مزاحم محمد خلف","AB",39,29,41,48,157,0.826316],
+  [29,29,"محمود صالح عويد عبود","CD",34,36,42,44,156,0.821053],
+  [30,30,"حمزة عمار حازم اسماعيل","AB",39,29,37,50,155,0.815789],
+  [31,31,"امير نشوان محمد شيت","AB",39,27,38,50,154,0.810526],
+  [32,32,"عثمان عدنان حازم عبد هللا","CD",39,25,41,48,153,0.805263],
+  [33,32,"محمود رعد احمد محمود","CD",34,35,40,44,153,0.805263],
+  [34,32,"مصطفى ماهر رمزي عبد الجبار","CD",37,35,31,50,153,0.805263],
+  [35,35,"زرنك شامل كامل كريم","CD",36,30,40,46,152,0.800000],
+  [36,36,"اسامه فارس وعد هللا يونس","CD",39,31,35,46,151,0.794737],
+  [37,36,"سيف الدين مهند عبدالرزاق شكر","AB",39,31,37,44,151,0.794737],
+  [38,38,"بشار زاهد محمد حامد","AB",34,29,37,50,150,0.789474],
+  [39,38,"جاسم محمد عباس محمد","AB",37,30,35,48,150,0.789474],
+  [40,38,"عائشة مهند عصام محمد","CD",36,30,34,50,150,0.789474],
+  [41,38,"عبد الرحمن جمال احمد محمد","AB",32,35,33,50,150,0.789474],
+  [42,38,"عبد الرحمن سفيان صباح حميد","AB",38,31,35,46,150,0.789474],
+  [43,38,"علي أكرم محمد حميد","AB",38,31,35,46,150,0.789474],
+  [44,44,"أسالم مرتجى صبحي سعودي","AB",37,29,35,48,149,0.784211],
+  [45,45,"محمود الدين معمر خلدون","CD",38,29,31,50,148,0.778947],
+  [46,46,"عبدهللا عدي مجيد جاسم","AB",32,33,36,46,147,0.773684],
+  [47,46,"عمر مهند غانم محمد علي","CD",35,31,35,46,147,0.773684],
+  [48,46,"يوسف فرحان احمد علي","AB",34,35,28,50,147,0.773684],
+  [49,49,"علي عامر حمزة سلمان","CD",37,25,32,50,144,0.757895],
+  [50,49,"محمد جمال سالم محمود","AB",38,25,33,48,144,0.757895],
+  [51,51,"رسل لبيد ياسين قاسم","CD",34,28,33,48,143,0.752632],
+  [52,52,"مؤمن محمود خضر خلف","CD",37,25,27,50,139,0.731579],
+  [53,52,"مرتضى محمد أياد قاسم","CD",37,25,29,48,139,0.731579],
+  [54,52,"نبأ سعد قاسم ايوب","AB",32,29,34,44,139,0.731579],
+  [55,55,"محمد علي زمبور محمد","CD",30,28,32,46,136,0.715789],
+  [56,56,"منار ابراهيم ياسين خضر","AB",29,31,31,42,133,0.700000],
+  [57,57,"رافدة طه حمد دخيل","CD",33,26,28,42,129,0.678947],
+  [58,57,"عمر نشوان عمر محمد","CD",28,24,33,44,129,0.678947],
+  [59,59,"مظفر وعدهللا سلطان حسين","CD",0,21,25,0,46,0.242105]
+];
+
+let currentFilter = 'all';
+let sortCol = -1;
+let sortDir = 1;
+
+function getGrade(pct) {
+  if (pct >= 0.9) return ['pct-excellent', 'ممتاز'];
+  if (pct >= 0.8) return ['pct-verygood', 'جيد جداً'];
+  if (pct >= 0.7) return ['pct-good', 'جيد'];
+  return ['pct-pass', 'مقبول'];
+}
+
+function scoreColor(val, max) {
+  const r = val / max;
+  if (r >= 0.9) return '#00D4AA';
+  if (r >= 0.75) return '#1A6BFF';
+  if (r >= 0.6) return '#F5C842';
+  return '#FF8A8A';
+}
+
+function renderTable(data) {
+  const tbody = document.getElementById('table-body');
+  const noRes = document.getElementById('no-results');
+  const countEl = document.getElementById('visible-count');
+
+  if (data.length === 0) {
+    tbody.innerHTML = '';
+    noRes.style.display = 'block';
+    countEl.textContent = '0';
+    return;
+  }
+
+  noRes.style.display = 'none';
+  countEl.textContent = data.length;
+
+  tbody.innerHTML = data.map((row, idx) => {
+    const [seq, rank, name, sec, res, abcd, emb, cyber, total, pct] = row;
+    const rankClass = rank === 1 ? 'rank-1' : rank === 2 ? 'rank-2' : rank === 3 ? 'rank-3' : '';
+    const isMe = name === 'محمد رعد احمد محمد';
+    const rowClass = isMe ? 'highlight-me' : rankClass;
+
+    let badge = '';
+    if (rank === 1) badge = '<span class="rank-badge gold">1</span>';
+    else if (rank === 2) badge = '<span class="rank-badge silver">2</span>';
+    else if (rank === 3) badge = '<span class="rank-badge bronze">3</span>';
+    else badge = `<span class="rank-badge normal">${rank}</span>`;
+
+    const secTag = sec === 'AB'
+      ? '<span class="section-tag ab">AB</span>'
+      : '<span class="section-tag cd">CD</span>';
+
+    const [gClass, gText] = getGrade(pct);
+    const pctFormatted = (pct * 100).toFixed(1) + '%';
+
+    const nameLabel = isMe ? `${name} ⭐` : name;
+
+    const delay = `animation-delay: ${idx * 0.02}s`;
+
+    return `<tr class="${rowClass}" style="${delay}">
+      <td><b style="color:var(--text-secondary);font-size:12px">${seq}</b></td>
+      <td>${badge}</td>
+      <td class="name-cell">${nameLabel}</td>
+      <td>${secTag}</td>
+      <td>
+        <div class="score-bar-wrap">
+          <span class="score-num" style="color:${scoreColor(res,40)}">${res}</span>
+          <div class="score-bar"><div class="score-fill" style="width:${(res/40*100).toFixed(0)}%;background:${scoreColor(res,40)}"></div></div>
+        </div>
+      </td>
+      <td>
+        <div class="score-bar-wrap">
+          <span class="score-num" style="color:${scoreColor(abcd,50)}">${abcd}</span>
+          <div class="score-bar"><div class="score-fill" style="width:${(abcd/50*100).toFixed(0)}%;background:${scoreColor(abcd,50)}"></div></div>
+        </div>
+      </td>
+      <td>
+        <div class="score-bar-wrap">
+          <span class="score-num" style="color:${scoreColor(emb,50)}">${emb}</span>
+          <div class="score-bar"><div class="score-fill" style="width:${(emb/50*100).toFixed(0)}%;background:${scoreColor(emb,50)}"></div></div>
+        </div>
+      </td>
+      <td>
+        <div class="score-bar-wrap">
+          <span class="score-num" style="color:${scoreColor(cyber,50)}">${cyber}</span>
+          <div class="score-bar"><div class="score-fill" style="width:${(cyber/50*100).toFixed(0)}%;background:${scoreColor(cyber,50)}"></div></div>
+        </div>
+      </td>
+      <td><span class="total-score${rank<=3?' top':''}">${total}</span></td>
+      <td><span class="pct-badge ${gClass}">${pctFormatted}</span></td>
+    </tr>`;
+  }).join('');
+}
+
+function filterTable() {
+  const q = document.getElementById('search').value.trim().toLowerCase();
+  let data = RAW_DATA.filter(row => {
+    const matchSec = currentFilter === 'all' || row[3] === currentFilter;
+    const matchQ = !q || row[2].toLowerCase().includes(q);
+    return matchSec && matchQ;
+  });
+  if (sortCol >= 0) {
+    data.sort((a, b) => {
+      const va = a[sortCol], vb = b[sortCol];
+      if (typeof va === 'number') return (va - vb) * sortDir;
+      return va.localeCompare(vb, 'ar') * sortDir;
+    });
+  }
+  renderTable(data);
+}
+
+function setFilter(f, btn) {
+  currentFilter = f;
+  document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  filterTable();
+}
+
+function sortTable(col) {
+  if (sortCol === col) sortDir *= -1;
+  else { sortCol = col; sortDir = 1; }
+  document.querySelectorAll('thead th').forEach((th, i) => {
+    th.classList.remove('sort-asc', 'sort-desc');
+    if (i === col) th.classList.add(sortDir === 1 ? 'sort-asc' : 'sort-desc');
+  });
+  filterTable();
+}
+
+// Init
+renderTable(RAW_DATA);
+
+// Animated counters
+function animateCounter(el, end, dur=1800, decimals=0) {
+  const start = 0;
+  const step = end / (dur / 16);
+  let cur = start;
+  const timer = setInterval(() => {
+    cur += step;
+    if (cur >= end) { cur = end; clearInterval(timer); }
+    el.textContent = cur.toFixed(decimals);
+  }, 16);
+}
+
+window.addEventListener('load', () => {
+  animateCounter(document.getElementById('total-count'), 59);
+  animateCounter(document.getElementById('top-score'), 186);
+  animateCounter(document.getElementById('avg-score'), 154.6, 1800, 1);
+});
+</script>
+
+</body>
+</html>
